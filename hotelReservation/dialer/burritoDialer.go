@@ -1,4 +1,4 @@
-// +build !burrito
+// +build burrito
 
 package dialer
 
@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	burrito "github.com/akshayknarayan/burrito/resolv-go"
 	"github.com/grpc-ecosystem/grpc-opentracing/go/otgrpc"
 	consul "github.com/hashicorp/consul/api"
 	lb "github.com/olivere/grpc/lb/consul"
@@ -35,6 +36,14 @@ func WithBalancer(registry *consul.Client) DialOption {
 	}
 }
 
+func WithBurritoDialer(burrito_root string) DialOption {
+	return func(name string) (grpc.DialOption, error) {
+		return grpc.WithDialer(
+			burrito.BurritoDialer(burrito_root),
+		), nil
+	}
+}
+
 // Dial returns a load balanced grpc client conn with tracing interceptor
 func Dial(name string, opts ...DialOption) (*grpc.ClientConn, error) {
 	dialopts := []grpc.DialOption{
@@ -52,6 +61,8 @@ func Dial(name string, opts ...DialOption) (*grpc.ClientConn, error) {
 		}
 		dialopts = append(dialopts, opt)
 	}
+
+	// TODO add in WithBurritoDialer option so we don't have to change all the call sites
 
 	conn, err := grpc.Dial(name, dialopts...)
 	if err != nil {

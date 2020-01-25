@@ -3,12 +3,12 @@ module github.com/harlow/go-micro-services
 go 1.13
 
 require (
+	github.com/akshayknarayan/burrito/resolv-go v0.0.0-00010101000000-000000000000
 	github.com/apache/thrift v0.0.0-20161221203622-b2a4d4ae21c7
 	github.com/armon/go-metrics v0.3.0 // indirect
 	github.com/bradfitz/gomemcache v0.0.0-20190913173617-a41fca850d0b
 	github.com/codahale/hdrhistogram v0.0.0-20161010025455-3a0bb77429bd
-	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b // indirect
-	github.com/golang/protobuf v1.2.0
+	github.com/golang/protobuf v1.3.2
 	github.com/grpc-ecosystem/grpc-opentracing v0.0.0-20171214222146-0e7658f8ee99
 	github.com/hailocab/go-geoindex v0.0.0-20160127134810-64631bfe9711
 	github.com/hashicorp/consul v1.0.6
@@ -27,10 +27,10 @@ require (
 	github.com/stretchr/testify v1.4.0 // indirect
 	github.com/uber/jaeger-client-go v2.11.2+incompatible
 	github.com/uber/jaeger-lib v1.4.0
-	golang.org/x/net v0.0.0-20181201002055-351d144fa1fc
+	golang.org/x/net v0.0.0-20190311183353-d8887717615a
 	golang.org/x/text v0.3.0
-	google.golang.org/genproto v0.0.0-20180306020942-df60624c1e9b
-	google.golang.org/grpc v1.10.0
+	google.golang.org/genproto v0.0.0-20190819201941-24fa4b261c55
+	google.golang.org/grpc v1.26.0
 	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22
 )
 
