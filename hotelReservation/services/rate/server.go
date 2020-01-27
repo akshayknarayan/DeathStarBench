@@ -28,12 +28,12 @@ const name = "srv-rate"
 
 // Server implements the rate service
 type Server struct {
-	Tracer    opentracing.Tracer
-	Port      int
-	IpAddr	 string
-	MongoSession 	*mgo.Session
-	Registry  *registry.Client
-	MemcClient *memcache.Client
+	Tracer       opentracing.Tracer
+	Port         int
+	IpAddr       string
+	MongoSession *mgo.Session
+	Registry     *registry.Client
+	MemcClient   *memcache.Client
 }
 
 // Run starts the server
@@ -133,7 +133,7 @@ func (s *Server) GetRates(ctx context.Context, req *pb.Request) (*pb.Result, err
 			} else {
 				for _, r := range tmpRatePlans {
 					ratePlans = append(ratePlans, r)
-					rate_json , err := json.Marshal(r)
+					rate_json, err := json.Marshal(r)
 					if err != nil {
 						fmt.Printf("json.Marshal err = %s\n", err)
 					}
@@ -167,5 +167,13 @@ func (r RatePlans) Swap(i, j int) {
 }
 
 func (r RatePlans) Less(i, j int) bool {
+	if r[j].RoomType == nil {
+		return true
+	}
+
+	if r[i].RoomType == nil {
+		return false
+	}
+
 	return r[i].RoomType.TotalRate > r[j].RoomType.TotalRate
 }

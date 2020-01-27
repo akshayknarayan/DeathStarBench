@@ -24,10 +24,10 @@ type Server struct {
 	recommendationClient recommendation.RecommendationClient
 	userClient           user.UserClient
 	reservationClient    reservation.ReservationClient
-	IpAddr	 string
-	Port     int
-	Tracer   opentracing.Tracer
-	Registry *registry.Client
+	IpAddr               string
+	Port                 int
+	Tracer               opentracing.Tracer
+	Registry             *registry.Client
 }
 
 // Run the server
@@ -174,10 +174,10 @@ func (s *Server) searchHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// fmt.Printf("searchHandler gets searchResp\n")
-	// for _, hid := range searchResp.HotelIds {
-	// 	fmt.Printf("search Handler hotelId = %s\n", hid)
-	// }
+	fmt.Printf("searchHandler gets searchResp\n")
+	for _, hid := range searchResp.HotelIds {
+		fmt.Printf("search Handler hotelId = %s\n", hid)
+	}
 
 	// grab locale from query params or default to en
 	locale := r.URL.Query().Get("locale")
@@ -192,9 +192,13 @@ func (s *Server) searchHandler(w http.ResponseWriter, r *http.Request) {
 		OutDate:      outDate,
 		RoomNumber:   1,
 	})
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
-	// fmt.Printf("searchHandler gets reserveResp\n")
-	// fmt.Printf("searchHandler gets reserveResp.HotelId = %s\n", reservationResp.HotelId)
+	fmt.Printf("searchHandler gets reserveResp\n")
+	fmt.Printf("searchHandler gets reserveResp.HotelId = %s\n", reservationResp.HotelId)
 
 	// hotel profiles
 	profileResp, err := s.profileClient.GetProfiles(ctx, &profile.Request{
@@ -206,7 +210,7 @@ func (s *Server) searchHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// fmt.Printf("searchHandler gets profileResp\n")
+	fmt.Printf("searchHandler gets profileResp\n")
 
 	json.NewEncoder(w).Encode(geoJSONResponse(profileResp.Hotels))
 }
