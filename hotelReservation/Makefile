@@ -1,14 +1,18 @@
-.PHONY: proto data run
+.PHONY: proto run
 
-proto:
-	for f in services/**/proto/*.proto; do \
-		protoc --go_out=plugins=grpc:. $$f; \
-		echo compiled: $$f; \
-	done
+proto: services/**/proto/*.pb.go
 
-data:
+%.pb.go: %.proto
+	protoc --go_out=plugins=grpc:. $<
+
+data/bindata.go: data/*.json
 	go-bindata -o data/bindata.go -pkg data data/*.json
 
-run:
+GO_SRCS=$(shell find . -name "*.go" | grep -v "vendor")
+
+build: $(GO_SRCS)
+	go mod vendor
 	docker-compose build
+
+run:
 	docker-compose up --remove-orphans
